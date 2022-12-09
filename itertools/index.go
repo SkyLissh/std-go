@@ -1,8 +1,8 @@
-package iters
+package itertools
 
-import "github.com/skylissh/iters/models"
+import "github.com/skylissh/std-go/itertools/iters"
 
-func Index[T comparable](iter models.Iterable[T], item T) int {
+func Index[T comparable](iter iters.Iterable[T], item T) int {
 	index := -1
 
 	for v := iter.Next(); v != nil; v = iter.Next() {
