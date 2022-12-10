@@ -1,7 +1,9 @@
 package cmp
 
-// Comparable is the interface that must be implemented by any type that
-// is to be compared using the Is method.
+// Comparable is the common interface implemented by all types that can be
+// compared.
+//
+// You need to implement this interface if you want to use the Is method.
 type Comparable[T any] interface {
 	// Compares this object with the specified object for order.
 	//

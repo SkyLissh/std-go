@@ -69,3 +69,45 @@ func TestByte(t *testing.T) {
 	assert.True(t, Is([]byte{1}).Less([]byte{2}))
 	assert.True(t, Is([]byte{1}).LessEqual([]byte{1}))
 }
+
+func TestSlice(t *testing.T) {
+	assert.True(t, IsSlice([]int{1, 2, 3}).Equal([]int{1, 2, 3}))
+	assert.True(t, IsSlice([]int{1, 2, 3}).NotEqual([]int{1, 2, 4}))
+	assert.True(t, IsSlice([]int{1, 2, 3}).Greater([]int{1, 2, 2}))
+	assert.True(t, IsSlice([]int{1, 2, 3}).GreaterEqual([]int{1, 2, 3}))
+	assert.True(t, IsSlice([]int{1, 2, 3}).Less([]int{1, 2, 4}))
+	assert.True(t, IsSlice([]int{1, 2, 3}).LessEqual([]int{1, 2, 3}))
+}
+
+func TestMap(t *testing.T) {
+	assert.True(t, IsMap(map[int]int{1: 2, 3: 4}).Equal(map[int]int{1: 2, 3: 4}))
+	assert.True(t, IsMap(map[int]int{1: 2, 3: 4}).NotEqual(map[int]int{1: 2, 3: 5}))
+	assert.True(t, IsMap(map[int]int{1: 2, 3: 4}).Greater(map[int]int{1: 2, 3: 3}))
+	assert.True(t, IsMap(map[int]int{1: 2, 3: 4}).GreaterEqual(map[int]int{1: 2, 3: 4}))
+	assert.True(t, IsMap(map[int]int{1: 2, 3: 4}).Less(map[int]int{1: 2, 3: 5}))
+	assert.True(t, IsMap(map[int]int{1: 2, 3: 4}).LessEqual(map[int]int{1: 2, 3: 4}))
+
+	// Test map with different key value
+	assert.False(t, IsMap(map[int]int{1: 2, 3: 4}).Equal(map[int]int{1: 2, 2: 4}))
+	assert.False(t, IsMap(map[int]int{1: 2, 3: 4}).Greater(map[int]int{1: 2, 2: 4}))
+}
+
+// TestCompare is test the compare method from a custom struct type.
+type comp[T int] struct {
+	a T
+}
+
+func (c *comp[T]) Compare(other *comp[T]) int {
+	return int(c.a) - int(other.a)
+}
+
+func TestCompare(t *testing.T) {
+	c := &comp[int]{1}
+
+	assert.True(t, Is(c).Equal(&comp[int]{1}))
+	assert.True(t, Is(c).NotEqual(&comp[int]{2}))
+	assert.True(t, Is(c).Greater(&comp[int]{0}))
+	assert.True(t, Is(c).GreaterEqual(&comp[int]{1}))
+	assert.True(t, Is(c).Less(&comp[int]{2}))
+	assert.True(t, Is(c).LessEqual(&comp[int]{1}))
+}
